@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerHeath : MonoBehaviour
+public class PlayerHealth : MonoBehaviour
 {
     private float health;
     private float lerpTimer;
