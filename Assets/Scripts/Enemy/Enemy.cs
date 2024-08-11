@@ -7,9 +7,14 @@ public class Enemy : MonoBehaviour
     private StateMachine stateMachine;
     private NavMeshAgent agent;
     private GameObject player;
+    private Vector3 lastKnowPos;
 
     public NavMeshAgent Agent { get => agent; }
     public GameObject Player { get => player; }
+    public Vector3 LastKnowPos
+    {
+        get => lastKnowPos; set => lastKnowPos = value;
+    }
 
     public Path path;
 
