@@ -24,6 +24,7 @@ public class PlayerStats : MonoBehaviour
 
     public AudioClip boom;
 
+
     // Start is called before the first frame update
     void Start()
     {

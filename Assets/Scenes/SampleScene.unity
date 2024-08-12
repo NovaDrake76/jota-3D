@@ -200,6 +200,7 @@ MonoBehaviour:
   muzzleFlashPrefab: {fileID: 1986165562}
   shootingSound: {fileID: 8300000, guid: bed853a110d48f841a6003727de89f74, type: 3}
   fireRate: 0.5
+  gunBarrel: {fileID: 301454211}
   audioSource: {fileID: 1111742755}
 --- !u!114 &180840592
 MonoBehaviour:
@@ -633,6 +634,37 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 259496858}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &301454210
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 301454211}
+  m_Layer: 0
+  m_Name: GunBarrel
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &301454211
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 301454210}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.1953, y: 0.077, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2075546060}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &332983539
 GameObject:
   m_ObjectHideFlags: 0
@@ -3172,7 +3204,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 5738456080911321149, guid: a35b8c32acba1334b9b31dfe8cdbc9be, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 301454211}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a35b8c32acba1334b9b31dfe8cdbc9be, type: 3}
 --- !u!1 &1929756469
@@ -3395,7 +3430,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1986165563}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: Emply lmao
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

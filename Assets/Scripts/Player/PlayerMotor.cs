@@ -24,6 +24,7 @@ public class PlayerMotor : MonoBehaviour
     public AudioClip shootingSound;
     public float fireRate = 0.5f;
     private float nextFireTime = 0f;
+    public Transform gunBarrel;
 
     public AudioSource audioSource;
 
@@ -121,7 +122,8 @@ public class PlayerMotor : MonoBehaviour
             // instantiate muzzle flash
             if (muzzleFlashPrefab != null)
             {
-                GameObject muzzleFlash = Instantiate(muzzleFlashPrefab, playerCamera.transform.position, playerCamera.transform.rotation);
+                // Use the gun barrel's position and rotation
+                GameObject muzzleFlash = Instantiate(muzzleFlashPrefab, gunBarrel.position, gunBarrel.rotation);
                 Destroy(muzzleFlash, 0.1f); // remove muzzle flash after a short time
             }
 
