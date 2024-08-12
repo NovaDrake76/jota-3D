@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerMotor : MonoBehaviour
 {
@@ -15,6 +16,16 @@ public class PlayerMotor : MonoBehaviour
     private bool lerpCrouch = false;
     private float crouchTimer = 0;
 
+    [Header("Shooting")]
+    public Camera playerCamera;
+    public float shootingRange = 100f;
+    public float damage = 10f;
+    public GameObject muzzleFlashPrefab;
+    public AudioClip shootingSound;
+    public float fireRate = 0.5f;
+    private float nextFireTime = 0f;
+
+    public AudioSource audioSource;
 
     // Start is called before the first frame update
     void Start()
@@ -93,4 +104,50 @@ public class PlayerMotor : MonoBehaviour
             speed = 5;
         }
     }
+
+    public void Shoot()
+    {
+        Debug.Log("Shooting");
+        if (Time.time > nextFireTime)
+        {
+            nextFireTime = Time.time + fireRate;
+
+            // play shooting sound
+            if (shootingSound != null)
+            {
+                audioSource.PlayOneShot(shootingSound);
+            }
+
+            // instantiate muzzle flash
+            if (muzzleFlashPrefab != null)
+            {
+                GameObject muzzleFlash = Instantiate(muzzleFlashPrefab, playerCamera.transform.position, playerCamera.transform.rotation);
+                Destroy(muzzleFlash, 0.1f); // remove muzzle flash after a short time
+            }
+
+            // raycast to detect hit
+            RaycastHit hit;
+            if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, shootingRange))
+            {
+                // check if the hit object has the "Enemy" tag
+                if (hit.transform.CompareTag("Enemy"))
+                {
+                    Enemy enemy = hit.transform.GetComponentInParent<Enemy>();
+                    if (enemy != null)
+                    {
+                        enemy.TakeDamage(damage);
+                    }
+                    else
+                    {
+                        Debug.LogWarning("Hit object tagged as Enemy but no Enemy component found in parent.");
+                    }
+                }
+                else
+                {
+                    Debug.Log("Hit object is not tagged as Enemy.");
+                }
+            }
+        }
+    }
+
 }

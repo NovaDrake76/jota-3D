@@ -28,9 +28,11 @@ public class Enemy : MonoBehaviour
     [Range(0.1f, 10)]
     public float fireRate;
 
+    [Header("Health Values")]
+    public float health = 100f;
+
     [SerializeField]
     private string currentState;
-
 
     // Start is called before the first frame update
     void Start()
@@ -75,6 +77,31 @@ public class Enemy : MonoBehaviour
         }
 
         return false;
+    }
 
+    public void TakeDamage(float damageAmount)
+    {
+        Debug.Log("Enemy took " + damageAmount + " damage.");
+        health -= damageAmount;
+
+        if (health > 0)
+        {
+            // Update the last known position of the player
+            LastKnowPos = player.transform.position;
+
+            // Enter the attack state
+            stateMachine.ChangeState(new AttackState());
+        }
+
+        if (health <= 0)
+        {
+            Die();
+        }
+    }
+
+    private void Die()
+    {
+        // Handle enemy death (e.g., play animation, destroy game object)
+        Destroy(gameObject);
     }
 }
