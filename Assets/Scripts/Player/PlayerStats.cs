@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerHealth : MonoBehaviour
+public class PlayerStats : MonoBehaviour
 {
     private float health;
+    private int balance = 100;
     private float lerpTimer;
     [Header("Health Bar")]
 
@@ -97,5 +98,16 @@ public class PlayerHealth : MonoBehaviour
     {
         health += healAmount;
         lerpTimer = 0f;
+    }
+
+    public void UpdateBalance(int amount)
+    {
+        balance += amount;
+        Debug.Log("Player's new balance: " + balance);
+    }
+
+    public int GetBalance()
+    {
+        return balance;
     }
 }
