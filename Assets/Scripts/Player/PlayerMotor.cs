@@ -21,6 +21,7 @@ public class PlayerMotor : MonoBehaviour
     public float shootingRange = 100f;
     public float damage = 10f;
     public GameObject muzzleFlashPrefab;
+    public GameObject Gun;
     public AudioClip shootingSound;
     public float fireRate = 0.5f;
     private float nextFireTime = 0f;
@@ -108,7 +109,6 @@ public class PlayerMotor : MonoBehaviour
 
     public void Shoot()
     {
-        Debug.Log("Shooting");
         if (Time.time > nextFireTime)
         {
             nextFireTime = Time.time + fireRate;
@@ -127,11 +127,15 @@ public class PlayerMotor : MonoBehaviour
                 Destroy(muzzleFlash, 0.1f); // remove muzzle flash after a short time
             }
 
+            // play shooting animation by setting RecoilTrigger parameter to true
+            Gun.GetComponent<Animator>().SetTrigger("RecoilTrigger");
+
+
+
             // raycast to detect hit
             RaycastHit hit;
             if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, shootingRange))
             {
-                // check if the hit object has the "Enemy" tag
                 if (hit.transform.CompareTag("Enemy"))
                 {
                     Enemy enemy = hit.transform.GetComponentInParent<Enemy>();
