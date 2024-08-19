@@ -26,6 +26,7 @@ public class PlayerMotor : MonoBehaviour
     public float fireRate = 0.5f;
     private float nextFireTime = 0f;
     public Transform gunBarrel;
+    private int Ammo = 12;
 
     public AudioSource audioSource;
 
@@ -109,50 +110,60 @@ public class PlayerMotor : MonoBehaviour
 
     public void Shoot()
     {
-        if (Time.time > nextFireTime)
+        if (Ammo > 0)
         {
-            nextFireTime = Time.time + fireRate;
-
-            // play shooting sound
-            if (shootingSound != null)
+            if (Time.time > nextFireTime)
             {
-                audioSource.PlayOneShot(shootingSound);
-            }
+                nextFireTime = Time.time + fireRate;
 
-            // instantiate muzzle flash
-            if (muzzleFlashPrefab != null)
-            {
-                // Use the gun barrel's position and rotation
-                GameObject muzzleFlash = Instantiate(muzzleFlashPrefab, gunBarrel.position, gunBarrel.rotation);
-                Destroy(muzzleFlash, 0.1f); // remove muzzle flash after a short time
-            }
-
-            // play shooting animation by setting RecoilTrigger parameter to true
-            Gun.GetComponent<Animator>().SetTrigger("RecoilTrigger");
-
-
-
-            // raycast to detect hit
-            RaycastHit hit;
-            if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, shootingRange))
-            {
-                if (hit.transform.CompareTag("Enemy"))
+                // play shooting sound
+                if (shootingSound != null)
                 {
-                    Enemy enemy = hit.transform.GetComponentInParent<Enemy>();
-                    if (enemy != null)
+                    audioSource.volume = 0.1f;
+                    audioSource.PlayOneShot(shootingSound);
+                }
+
+                // instantiate muzzle flash
+                if (muzzleFlashPrefab != null)
+                {
+                    // Use the gun barrel's position and rotation
+                    GameObject muzzleFlash = Instantiate(muzzleFlashPrefab, gunBarrel.position, gunBarrel.rotation);
+                    Destroy(muzzleFlash, 0.1f); // remove muzzle flash after a short time
+                }
+
+                // play shooting animation by setting RecoilTrigger parameter to true
+                Gun.GetComponent<Animator>().SetTrigger("RecoilTrigger");
+
+
+
+                // raycast to detect hit
+                RaycastHit hit;
+                if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, shootingRange))
+                {
+                    if (hit.transform.CompareTag("Enemy"))
                     {
-                        enemy.TakeDamage(damage);
+                        Enemy enemy = hit.transform.GetComponentInParent<Enemy>();
+                        if (enemy != null)
+                        {
+                            enemy.TakeDamage(damage);
+                        }
+                        else
+                        {
+                            Debug.LogWarning("Hit object tagged as Enemy but no Enemy component found in parent.");
+                        }
                     }
                     else
                     {
-                        Debug.LogWarning("Hit object tagged as Enemy but no Enemy component found in parent.");
+                        Debug.Log("Hit object is not tagged as Enemy.");
                     }
                 }
-                else
-                {
-                    Debug.Log("Hit object is not tagged as Enemy.");
-                }
             }
+            Ammo--;
+        }
+        else
+        {
+            Gun.GetComponent<Animator>().SetTrigger("Reload");
+            Ammo = 12;
         }
     }
 
