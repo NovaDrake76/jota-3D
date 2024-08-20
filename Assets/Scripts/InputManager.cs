@@ -24,6 +24,7 @@ public class InputManager : MonoBehaviour
         onFoot.Crouch.performed += ctx => motor.Crouch();
         onFoot.Sprint.performed += ctx => motor.Sprint();
         onFoot.Shoot.performed += ctx => motor.Shoot();
+        onFoot.Reload.performed += ctx => motor.Reload();
     }
 
     // Update is called once per frame

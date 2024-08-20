@@ -27,6 +27,7 @@ public class PlayerMotor : MonoBehaviour
     private float nextFireTime = 0f;
     public Transform gunBarrel;
     private int Ammo = 12;
+    private bool reloading = false;
 
     public AudioSource audioSource;
 
@@ -110,7 +111,7 @@ public class PlayerMotor : MonoBehaviour
 
     public void Shoot()
     {
-        if (Ammo > 0)
+        if (Ammo > 0 && !reloading)
         {
             if (Time.time > nextFireTime)
             {
@@ -162,9 +163,30 @@ public class PlayerMotor : MonoBehaviour
         }
         else
         {
-            Gun.GetComponent<Animator>().SetTrigger("Reload");
-            Ammo = 12;
+            Reload();
         }
     }
+
+    public void Reload()
+    {
+        if (Ammo == 12 || reloading)
+        {
+            return;
+        }
+
+        reloading = true;
+        Gun.GetComponent<Animator>().SetTrigger("Reload");
+
+        StartCoroutine(WaitForReloadAnimation());
+    }
+
+    private IEnumerator WaitForReloadAnimation()
+    {
+        yield return new WaitForSeconds(1.1f);
+
+        Ammo = 12;
+        reloading = false;
+    }
+
 
 }
