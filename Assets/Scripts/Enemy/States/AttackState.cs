@@ -7,9 +7,9 @@ public class AttackState : BaseState
     private float moveTimer;
     private float losePlayerTimer;
     private float shotTimer;
-
     public override void Enter()
     {
+        enemy.audioSource.PlayOneShot(enemy.discoverySound);
         // Move towards the last known position of the player
         if (enemy.LastKnowPos != Vector3.zero)
         {
@@ -21,10 +21,16 @@ public class AttackState : BaseState
     {
         if (enemy.CanSeePlayer())
         {
+            if (enemy.isDead)
+            {
+                return;
+            }
+
             losePlayerTimer = 0;
             moveTimer += Time.deltaTime;
             shotTimer += Time.deltaTime;
             enemy.transform.LookAt(enemy.Player.transform);
+
 
             if (shotTimer > enemy.fireRate)
             {
@@ -44,18 +50,26 @@ public class AttackState : BaseState
             if (losePlayerTimer > 8)
             {
                 stateMachine.ChangeState(new SearchState());
+                enemy.audioSource.PlayOneShot(enemy.lostSound);
             }
         }
     }
 
     public void Shoot()
     {
+        if (enemy.isDead)
+        {
+            return;
+        }
         Transform gunBarrel = enemy.gunBarrel;
         GameObject bullet = GameObject.Instantiate(Resources.Load("Prefabs/Bullet") as GameObject, gunBarrel.position, enemy.transform.rotation);
 
         Vector3 shootDirection = (enemy.Player.transform.position - gunBarrel.transform.position).normalized;
 
         bullet.GetComponent<Rigidbody>().velocity = Quaternion.AngleAxis(Random.Range(-3f, 3f), Vector3.up) * shootDirection * 40;
+
+        enemy.audioSource.PlayOneShot(enemy.shootSound);
+
         shotTimer = 0;
     }
 

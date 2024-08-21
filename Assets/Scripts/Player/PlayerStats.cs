@@ -22,7 +22,7 @@ public class PlayerStats : MonoBehaviour
     public float durationTimer;
     public AudioSource audioSource;
 
-    public AudioClip boom;
+    public AudioClip takeDamage;
 
 
     // Start is called before the first frame update
@@ -90,7 +90,7 @@ public class PlayerStats : MonoBehaviour
         health -= damage;
         lerpTimer = 0f;
         durationTimer = 0;
-        audioSource.PlayOneShot(boom);
+        audioSource.PlayOneShot(takeDamage);
         Overlay.color = new Color(Overlay.color.r, Overlay.color.g, Overlay.color.b, 1);
 
     }

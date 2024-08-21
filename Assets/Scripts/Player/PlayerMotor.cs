@@ -23,6 +23,7 @@ public class PlayerMotor : MonoBehaviour
     public GameObject muzzleFlashPrefab;
     public GameObject Gun;
     public AudioClip shootingSound;
+    public AudioClip reloadSound;
     public float fireRate = 0.5f;
     private float nextFireTime = 0f;
     public Transform gunBarrel;
@@ -176,6 +177,7 @@ public class PlayerMotor : MonoBehaviour
 
         reloading = true;
         Gun.GetComponent<Animator>().SetTrigger("Reload");
+        audioSource.PlayOneShot(reloadSound);
 
         StartCoroutine(WaitForReloadAnimation());
     }

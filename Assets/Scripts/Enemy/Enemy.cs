@@ -15,6 +15,11 @@ public class Enemy : MonoBehaviour
     {
         get => lastKnowPos; set => lastKnowPos = value;
     }
+    public AudioSource audioSource;
+    public AudioClip shootSound;
+    public AudioClip deathSound;
+    public AudioClip discoverySound;
+    public AudioClip lostSound;
 
     public Path path;
 
@@ -33,6 +38,7 @@ public class Enemy : MonoBehaviour
 
     [SerializeField]
     private string currentState;
+    public bool isDead = false;
 
     // Start is called before the first frame update
     void Start()
@@ -41,6 +47,8 @@ public class Enemy : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         stateMachine.Initialize();
         player = GameObject.FindGameObjectWithTag("Player");
+        audioSource = GetComponent<AudioSource>();
+        audioSource.volume = 0.02f;
     }
 
     // Update is called once per frame
@@ -81,6 +89,10 @@ public class Enemy : MonoBehaviour
 
     public void TakeDamage(float damageAmount)
     {
+        if (isDead)
+        {
+            return;
+        }
         Debug.Log("Enemy took " + damageAmount + " damage.");
         health -= damageAmount;
 
@@ -89,8 +101,11 @@ public class Enemy : MonoBehaviour
             // Update the last known position of the player
             LastKnowPos = player.transform.position;
 
-            // Enter the attack state
-            stateMachine.ChangeState(new AttackState());
+            // Enter the attack state if its not already in it
+            if (stateMachine.activeState.ToString() != "AttackState")
+            {
+                stateMachine.ChangeState(new AttackState());
+            }
         }
 
         if (health <= 0)
@@ -101,7 +116,14 @@ public class Enemy : MonoBehaviour
 
     private void Die()
     {
-        // Handle enemy death (e.g., play animation, destroy game object)
+        isDead = true;
+        audioSource.PlayOneShot(deathSound);
+        StartCoroutine(DieCoroutine());
+    }
+
+    private IEnumerator DieCoroutine()
+    {
+        yield return new WaitForSeconds(1.3f);
         Destroy(gameObject);
     }
 }
