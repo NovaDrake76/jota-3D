@@ -8,17 +8,20 @@ public class Slot : Interactable
     private GameObject lever;
     private GameObject player;
 
-    // amount of balance to gain or lose
-    public int maxReward = 100;
-    public int maxLoss = 50;
+    public int MaxHealthToRestore = 100;
 
     // reference to PlayerStats or another player stats script
     private PlayerStats PlayerStats;
+    public AudioSource audioSource;
+    public AudioClip healSound;
+    public AudioClip noHealSound;
 
     void Start()
     {
         player = GameObject.FindWithTag("Player");
         PlayerStats = player.GetComponent<PlayerStats>();
+        audioSource = GetComponent<AudioSource>();
+        audioSource.volume = 0.15f;
     }
 
     // Update is called once per frame
@@ -29,14 +32,17 @@ public class Slot : Interactable
 
     protected override void Interact()
     {
+        if (MaxHealthToRestore <= 0)
+        {
+            audioSource.PlayOneShot(noHealSound);
+            return;
+        }
+
         lever.GetComponent<Animator>().SetTrigger("PullLever");
-        // simulate slot machine result
-        int result = Random.Range(-maxLoss, maxReward + 1);
+        PlayerStats.RestoreHealth(10);
+        audioSource.PlayOneShot(healSound);
 
-        // update player's balance based on result
-        PlayerStats.UpdateBalance(result);
+        MaxHealthToRestore -= 10;
 
-        // optional: play animation or sound for the slot machine
-        Debug.Log("Slot machine result: " + result + " balance updated to: " + PlayerStats.GetBalance());
     }
 }
