@@ -8,7 +8,7 @@ public class Slot : Interactable
     private GameObject lever;
     private GameObject player;
 
-    public int MaxHealthToRestore = 100;
+    public int MaxHealthToRestore = 120;
 
     // reference to PlayerStats or another player stats script
     private PlayerStats PlayerStats;
@@ -39,10 +39,10 @@ public class Slot : Interactable
         }
 
         lever.GetComponent<Animator>().SetTrigger("PullLever");
-        PlayerStats.RestoreHealth(10);
+        PlayerStats.RestoreHealth(20);
         audioSource.PlayOneShot(healSound);
 
-        MaxHealthToRestore -= 10;
+        MaxHealthToRestore -= 20;
 
     }
 }

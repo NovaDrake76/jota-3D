@@ -21,8 +21,11 @@ public class PlayerStats : MonoBehaviour
     public float fadeSpeed;
     public float durationTimer;
     public AudioSource audioSource;
+    public GameObject gameOverCanvas;
 
     public AudioClip takeDamage;
+    private CursorLockMode cursorLock;
+
 
 
     // Start is called before the first frame update
@@ -30,6 +33,10 @@ public class PlayerStats : MonoBehaviour
     {
         health = maxHealth;
         Overlay.color = new Color(Overlay.color.r, Overlay.color.g, Overlay.color.b, 0);
+        gameOverCanvas.SetActive(false);
+        cursorLock = CursorLockMode.Locked;
+        Cursor.visible = false;
+        Time.timeScale = 1;
     }
 
     // Update is called once per frame
@@ -93,6 +100,11 @@ public class PlayerStats : MonoBehaviour
         audioSource.PlayOneShot(takeDamage);
         Overlay.color = new Color(Overlay.color.r, Overlay.color.g, Overlay.color.b, 1);
 
+        if (health <= 0)
+        {
+            Die();
+        }
+
     }
 
     public void RestoreHealth(float healAmount)
@@ -110,5 +122,15 @@ public class PlayerStats : MonoBehaviour
     public int GetBalance()
     {
         return balance;
+    }
+
+    public void Die()
+    {
+        gameOverCanvas.SetActive(true);
+        Time.timeScale = 0;
+        //liberate mouse to allow player to click on buttons
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
     }
 }

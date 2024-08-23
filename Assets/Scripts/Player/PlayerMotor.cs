@@ -128,20 +128,19 @@ public class PlayerMotor : MonoBehaviour
                 // instantiate muzzle flash
                 if (muzzleFlashPrefab != null)
                 {
-                    // Use the gun barrel's position and rotation
                     GameObject muzzleFlash = Instantiate(muzzleFlashPrefab, gunBarrel.position, gunBarrel.rotation);
                     Destroy(muzzleFlash, 0.1f); // remove muzzle flash after a short time
                 }
 
-                // play shooting animation by setting RecoilTrigger parameter to true
+                // play shooting animation
                 Gun.GetComponent<Animator>().SetTrigger("RecoilTrigger");
-
-
 
                 // raycast to detect hit
                 RaycastHit hit;
                 if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, shootingRange))
                 {
+                    Debug.Log("Hit: " + hit.transform.name); // Debug log for hit object
+
                     if (hit.transform.CompareTag("Enemy"))
                     {
                         Enemy enemy = hit.transform.GetComponentInParent<Enemy>();
@@ -159,8 +158,13 @@ public class PlayerMotor : MonoBehaviour
                         Debug.Log("Hit object is not tagged as Enemy.");
                     }
                 }
+                else
+                {
+                    Debug.Log("No hit detected by Raycast.");
+                }
+
+                Ammo--;
             }
-            Ammo--;
         }
         else
         {
