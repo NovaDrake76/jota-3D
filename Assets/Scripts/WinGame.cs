@@ -13,6 +13,8 @@ public class WinGame : MonoBehaviour
     {
         if (enemy.health <= 0)
         {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }
     }
